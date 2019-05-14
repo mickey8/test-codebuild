@@ -4,9 +4,8 @@ version: 0.2
 env:
   variables:
     s3_bucket: mickey8-sonarqube
-    home_dir: $CODEBUILD_SRC_DIR
-    src_dir: $home_dir/src
-    target_dir: $home_dir/target
+    src_dir: src
+    target_dir: target
     #sonarqube_version: 7.7
     #manual_plugins:
     #manual_plugins_xxx:
@@ -18,11 +17,11 @@ phases:
       - pip3 install jinja2
   pre_build:
     commands:
-      - mkdir $target_dir
+      - mkdir $CODEBUILD_SRC_DIR/$target_dir
   build:
     commands:
-      - cd $target_dir
+      - cd $CODEBUILD_SRC_DIR/$target_dir
       - curl -O https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-${sonarqube_version}.zip
-      - python3 $home_dir/render_template.py
-      - cp -r $src_dir/* $target_dir
+      - python3 $CODEBUILD_SRC_DIR/render_template.py
+      - cp -r $CODEBUILD_SRC_DIR/$src_dir/* .
       - aws deploy push --application-name sonarqube --s3-location s3://${s3_bucket}/sonarqube/sonarqube.zip
