@@ -4,7 +4,7 @@ version: 0.2
 env:
   variables:
     s3_bucket: mickey8-sonarqube
-    home_dir: $CODEBUILD_SRC_DIR/codebuild
+    home_dir: $CODEBUILD_SRC_DIR
     src_dir: $home_dir/src
     target_dir: $home_dir/target
     #sonarqube_version: 7.7
