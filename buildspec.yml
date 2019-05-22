@@ -6,7 +6,7 @@ env:
     s3_bucket: mickey8-sonarqube
     src_dir: src
     target_dir: target
-    #sonarqube_version: 7.7
+    sonarqube_version: 7.7
     #manual_plugins:
     #manual_plugins_xxx:
 #
@@ -21,7 +21,7 @@ phases:
   build:
     commands:
       - cd $CODEBUILD_SRC_DIR/$target_dir
-      - curl -O https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-${sonarqube_version}.zip
+      - curl -o sonarqube.zip https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-{sonarqube_version}.zip
       - python3 $CODEBUILD_SRC_DIR/render_template.py
       - cp -r $CODEBUILD_SRC_DIR/$src_dir/* .
-      - aws deploy push --application-name sonarqube --s3-location s3://${s3_bucket}/sonarqube/sonarqube.zip
+      - aws deploy push --application-name sonarqube --s3-location s3://${s3_bucket}/sonarqube/sonarqube-deployment.zip

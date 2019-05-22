@@ -1,0 +1,21 @@
+---
+
+- set_fact:
+    rds_identifier: sonarqube
+    rds_snapshot_identifier: "sonarqube-{{ sonarqube.version }}-before-autoupdate"
+
+- shell: "aws rds describe-db-snapshots --db-snapshot-identifier {{ rds_snapshot_identifier }} --snapshot-type manual"
+  failed_when: False
+  register: rds_describe_db_snapshots_command
+
+- name: create rds snapshot
+  shell: "aws rds create-db-snapshot --db-instance-identifier sonarqube --db-snapshot-identifier {{ rds_snapshot_identifier }} --tags Key=DeployId,Value={{ codedeploy_id }}"
+  when: rds_describe_db_snapshots_command.rc != 0
+
+- name: restore database from snapshot
+  block:
+    - name: change identifier of current instance
+      shell: "aws rds modify-db-instance --db-instance-identifier {{ rds_identifier }} --new-db-instance-identifier {{ rds_identifier }}-{{ codedeploy_id }}"
+    - name: restore rds snapshot
+      shell: "aws rds restore-db-instance-from-db-snapshot --db-instance-identifier {{ rds_identifier }} --db-snapshot-identifier {{ snapshot_identifier }}"
+  when: rds_describe_db_snapshots_command.rc == 0

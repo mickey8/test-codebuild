@@ -1,0 +1,10 @@
+---
+
+- hosts: sonarqube
+  remote_user: ec2-user
+  vars_files:
+    - sonarqube-vars.yml
+  vars:
+    codedeploy_id: lookup("env", "DEPLOYMENT_ID")
+  roles:
+    - role-sonarqube

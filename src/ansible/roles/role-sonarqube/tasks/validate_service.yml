@@ -1,0 +1,18 @@
+---
+
+- name: check whether health status is GREEN
+  uri:
+    url: "http://{{ sonarqube_config.user }}:{{ sonarqube_config.password }}@{{ sonarqube_config.host }}:{{ sonarqube_config.port }}/api/system/health"
+    return_content: yes
+    body_format: json
+  register: this
+  failed_when: this.json.health != "GREEN"
+
+- name: check whether server id is not changed
+  uri:
+    url: "http://{{ sonarqube_config.host }}:{{ sonarqube_config.port }}/api/system/status"
+    return_content: yes
+    body_format: json
+  register: this
+  failed_when: this.json.id != "{{ sonarqube.server_id }}"
+  when: "{{ sonarqube.server_id | default('') }}" != ""

@@ -1,0 +1,7 @@
+---
+sonarqube_config:
+  user: admin
+  password: admin
+  host: localhost
+  port: 9000
+  startup_shell: "/opt/sonarqube/bin/linux-x86-64/bin/sonar.sh"

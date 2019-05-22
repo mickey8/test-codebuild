@@ -1,0 +1,20 @@
+---
+
+- name: create new sonarqube home
+  block:
+    - stat:
+        path: /opt/sonarqube
+      register: sonarqube_dir_stat
+    - name: unlink old sonarqube
+      file:
+        path: /opt/sonarqube
+        state: absence
+      when: sonarqube_dir_stat.stat.islnk
+    - name: create symlink to new sonarqube
+      file:
+        src: "/opt/sonarqube-{{ sonarqube.version }}"
+        dest: /opt/sonarqube
+        state: link
+
+- name: start sonarqube server
+  command: "{{ sonarqube_config.startup_shell }} start"

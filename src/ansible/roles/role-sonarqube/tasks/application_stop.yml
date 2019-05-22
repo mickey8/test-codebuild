@@ -1,0 +1,4 @@
+---
+
+- name: stop sonarqube server
+  command: "{{ sonarqube_config.startup_shell }} stop"

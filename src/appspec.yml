@@ -1,0 +1,23 @@
+---
+version: 0.0
+os: linux
+files:
+  - source: sonarqube.zip
+    destination: /tmp
+  - source: ansible
+    destination: /opt
+  - source: sonarqube-vars.yml
+    destination: /opt/ansible
+hooks:
+  ApplicationStop:
+    - location: hooks/application_stop.sh
+      timeout: 300
+  BeforeInstall:
+    - location: hooks/before_install.sh
+      timeout: 300
+  ApplicationStart:
+    - location: hooks/application_start.sh
+      timeout: 300
+  ValidateService:
+    - location: hooks/validate_service.sh
+      timeout: 300

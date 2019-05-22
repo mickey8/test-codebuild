@@ -1,0 +1,17 @@
+---
+
+- include: application_stop.yml
+  tags:
+    - application-stop
+
+- include: before_install.yml 
+  tags:
+    - before-install
+
+- include: application_start.yml
+  tags:
+    - application-start
+
+- include: validate_service.yml
+  tags:
+    - validate-service
