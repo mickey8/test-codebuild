@@ -21,7 +21,7 @@ phases:
   build:
     commands:
       - cd $CODEBUILD_SRC_DIR/$target_dir
-      - curl -o sonarqube.zip https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-{sonarqube_version}.zip
+      - curl -o sonarqube.zip https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-${sonarqube_version}.zip
       - python3 $CODEBUILD_SRC_DIR/render_template.py
       - cp -r $CODEBUILD_SRC_DIR/$src_dir/* .
       - aws deploy push --application-name sonarqube --s3-location s3://${s3_bucket}/sonarqube/sonarqube-deployment.zip
